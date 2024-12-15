@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { filterByMonth, filterByYear } from "../../utils/FilterData";
 import ExpenseCard from "./ExpenseCard";
 import ExpensesTopSection from "./expensesTopSection";
 import Filtering from "./Filtering";
@@ -25,7 +26,7 @@ const expensesData = [
 export default function Expenses() {
   const [expenses, setExpenses] = useState(expensesData);
   const [isOpen, setIsOpen] = useState(false);
-  const [isAscending, setIsAscending] = useState(false);
+  const [filter, setFilter] = useState({ month: "", year: "" });
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure that you want to delete item?")) {
@@ -46,26 +47,33 @@ export default function Expenses() {
     setIsOpen(true);
   };
 
-  // calculate total expenses
-  const handleTotal = expenses.reduce((pre, next) => pre + next.amount, 0);
-
-  //   sorting
-  const handleSorting = (e) => {
-    const rst = e.target.value;
-    setIsAscending(rst === "ascending" ? true : false);
+  //   handle new feature
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilter((prev) => ({ ...prev, [name]: value }));
   };
-
-  let allData;
-  if (isAscending) {
-    allData = expenses.sort((a, b) => new Date(a.date) - new Date(b.date));
-  } else {
-    allData = expenses.sort((a, b) => new Date(b.date) - new Date(a.date));
+  let allData = expenses;
+  if (filter.month) {
+    allData = filterByMonth(allData, filter);
   }
+  if (filter.year) {
+    allData = filterByYear(allData, filter);
+  }
+  // calculate total expenses
+  const handleTotal = allData.reduce(
+    (pre, next) => pre + parseInt(next.amount),
+    0
+  );
+
   return (
     <div>
       {isOpen && <Modal handleAddExpense={handleAddExpense} />}
       <ExpensesTopSection handleModalState={handleModalState} />
-      <Filtering handleTotal={handleTotal} handleSorting={handleSorting} />
+      <Filtering
+        handleTotal={handleTotal}
+        handleFilterChange={handleFilterChange}
+        filter={filter}
+      />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {allData.map((expense) => (
           <ExpenseCard
