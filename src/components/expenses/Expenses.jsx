@@ -67,7 +67,9 @@ export default function Expenses() {
 
   return (
     <div>
-      {isOpen && <Modal handleAddExpense={handleAddExpense} />}
+      {isOpen && (
+        <Modal handleAddExpense={handleAddExpense} setIsOpen={setIsOpen} />
+      )}
       <ExpensesTopSection handleModalState={handleModalState} />
       <Filtering
         handleTotal={handleTotal}

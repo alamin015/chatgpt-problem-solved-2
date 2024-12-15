@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useRef, useState } from "react";
 const initialData = {
   title: "",
   description: "",
@@ -7,8 +7,16 @@ const initialData = {
   date: "",
 };
 
-export default function Modal({ handleAddExpense }) {
+export default function Modal({ handleAddExpense, setIsOpen }) {
   const [formData, setFormData] = useState(initialData);
+  const formRef = useRef(null);
+  const modalRef = useRef(null);
+
+  const handleTest = (event) => {
+    if (formRef.current && !formRef.current.contains(event.target)) {
+      setIsOpen(false);
+    }
+  };
 
   const handleOnChange = (e) => {
     const inputName = e.target.name;
@@ -23,8 +31,15 @@ export default function Modal({ handleAddExpense }) {
   };
 
   return (
-    <div className="absolute top-0 left-0 bg-gray-900 flex items-center justify-center w-full h-[100vh]">
-      <div className="max-w-[500px] w-full border bg-white backdrop-blur-2xl border-gray-300 rounded-lg shadow-lg p-6">
+    <div
+      onClick={handleTest}
+      ref={modalRef}
+      className="absolute top-0 left-0 bg-gray-900 flex items-center justify-center w-full h-[100vh]"
+    >
+      <div
+        ref={formRef}
+        className="max-w-[500px] w-full border bg-white backdrop-blur-2xl border-gray-300 rounded-lg shadow-lg p-6"
+      >
         <h2 className="text-center text-xl font-medium mb-3 text-blue-950">
           Expense Form
         </h2>
