@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 export default function ExpensesTopSection({ handleModalState }) {
   return (
-    <div className="flex items-center justify-between py-4 gap-3">
+    <div className="flex flex-wrap items-center justify-between py-4 gap-3">
       <h2 className="text-blue-950 font-medium text-2xl">Expense Tracker</h2>
       <button
         onClick={handleModalState}
