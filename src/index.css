@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .input {
+    @apply text-sm text-blue-950 font-medium w-full p-2 rounded-lg mb-2 focus:border-blue-900 border border-gray-500 outline-none;
+  }
+}
